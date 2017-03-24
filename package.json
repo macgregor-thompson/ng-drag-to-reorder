@@ -1,0 +1,25 @@
+{
+  "name": "ng-drag-to-reorder",
+  "version": "0.1.0",
+  "description": "Lightweight AngularJS drag and drop functionality to reorder lists without any dependencies other than Angular.",
+  "main": "ngDragToReorder.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhthompson86/ng-drag-to-reorder.git"
+  },
+  "keywords": [
+    "AngularJS",
+    "Drag and Drop",
+    "Draggable",
+    "Reorder"
+  ],
+  "author": " MacGregor Thompson <mhthompson86@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mhthompson86/ng-drag-to-reorder/issues"
+  },
+  "homepage": "https://github.com/mhthompson86/ng-drag-to-reorder#readme"
+}
