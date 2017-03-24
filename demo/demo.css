@@ -1,0 +1,48 @@
+.container {
+  margin-top: 100px;
+}
+
+/* Drag and Drop */
+
+[draggable=true] {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+
+}
+
+[draggable=true]:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+li.draggable {
+  background-color: #dff0d8;
+  font-size: 1.2em;
+}
+
+li.dtr-dragging  {
+  opacity: 0.3;
+  /*border: none !important;*/
+}
+
+li.dtr-transition {
+  background-color: #d9edf7;
+  /*transition: background-color 2s ease-in-out;*/
+}
+
+.dtr-over {
+  /* background-color: rgba(51, 122, 183, 0.1) !important;*/
+}
+
+.dtr-dropping-above {
+  border-top: 15px solid #ccc !important;
+}
+
+.dtr-dropping-below {
+  border-bottom: 15px solid #ccc !important;
+}
+
+/* End Drag and Drop */
