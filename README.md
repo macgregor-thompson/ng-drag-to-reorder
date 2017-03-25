@@ -6,7 +6,6 @@ Lightweight AngularJS drag and drop functionality to reorder lists without any d
 
 - [`Simple List`](http://htmlpreview.github.io/?https://github.com/mhthompson86/ng-drag-to-reorder/blob/master/demo/index.html)
 
-
 ## Install:
 
 ```shell
@@ -24,7 +23,6 @@ $ bower install ng-drag-to-reorder
 ```js
 angular.module('yourApp', ['ngDragToReorder']);
 ```
-
 
 ## How to Use:
 
@@ -57,7 +55,6 @@ $scope.$on('dragToReorder_drop', function (evt, data) {
 });
 ```
 
-
 ## CSS Classes:
 
 When you start dragging the element, different classes are added to the element being dragged as well as the elements you are dragging over. 
@@ -72,11 +69,13 @@ When you start dragging the element, different classes are added to the element 
 This default delay is 1 second (1000 ms), but can be designated by using the `dtr-transition-timeout` attribute (see **Options** below).
 
 
-*** **Important:**  The class `dtr-dropping-above` or `dtr-dropping-below` will also be added to the previous or next sibling element of the one you are hovering over.  Depending on which class the element you are hovering over has will determine which sibling will have a class added. (See example below...)
+*** **Important:**  The class `dtr-dropping-above` or `dtr-dropping-below` will also be added to the previous or next sibling element of the one you are hovering over. 
+Depending on which class the element you are hovering over has will determine which sibling will have a class added. (See example below...)
 
 **E.g.**  If you have Elements 1-10.  And you begin dragging Element 1.  Element 1 will have the `dtr-dragging` and `dtr-transition` classes added to it.
-Let's say you drag Element 1 and are hovering over Element 5.  Element 5 will have the `dtr-over` class and either the `dtr-dropping-above` class if the mouse is above the
-halfway point (offsetY) or `dtr-dropping-below` if below it.   If above it, the previous sibling above (Element 4) will have the `dtr-dropping-below` class added to it.  If below the halfway point, the next sibling below (Element 6) will have the `dtr-dropping-above` class added to it.  
+Let's say you drag Element 1 and are hovering over Element 5. Element 5 will have the `dtr-over` class and either the `dtr-dropping-above` class if the mouse is above the
+halfway point (offsetY) or `dtr-dropping-below` if below it.  If above it, the previous sibling above (Element 4) will have the `dtr-dropping-below` class added to it. 
+If below the halfway point, the next sibling below (Element 6) will have the `dtr-dropping-above` class added to it. 
 After you drop Element 1, the `dtr-dragging` is removed immediately, followed by the `dtr-transition` class 1 second later or after the number of milliseconds passed
 in via the `dtr-transition-timeout` attribute (see **Options** below). This allows for more flexibility in how you want to style the elements during the drag and drop process. 
 
@@ -120,9 +119,9 @@ This is just an available option in case you want to add some custom animation.
 ```
 
 
-3. You can import the **ngDragToReorder** service into your controller and check to see if drag and drop functionality is supported by your browser.  
-The `drag-to-reorder` directive uses this service to prevent itself from wiring up event listeners if the browser doesn't support it.  
-You can use the same service if you want to show or hide and buttons or other UI based on browser support.  
+3. You can import the **ngDragToReorder** service into your controller and check to see if drag and drop functionality is supported by your 
+browser. The `drag-to-reorder` directive uses this service to prevent itself from wiring up event listeners if the browser doesn't support 
+it. You can use the same service if you want to show or hide and buttons or other UI based on browser support.  
 
 ```html
 <!-- In your template (example) -->
