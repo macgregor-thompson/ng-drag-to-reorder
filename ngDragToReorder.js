@@ -2,7 +2,6 @@
   'use strict';
 
   angular.module('ngDragToReorder', [])
-  /* @ngInject */
     .service('ngDragToReorder', function () {
       return {
         isSupported: draggable
@@ -13,8 +12,7 @@
         return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
       }
     })
-    /* @ngInject */
-    .directive('dragToReorder', function (ngDragToReorder, $parse) {
+    .directive('dragToReorder', ['ngDragToReorder', '$parse', function (ngDragToReorder, $parse) {
       return {
         restrict: 'A',
         link: function (scope, element, attrs) {
@@ -176,6 +174,6 @@
         }
       };
 
-    });
+    }]);
 
 })();
