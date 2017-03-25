@@ -1,9 +1,5 @@
 # ng-drag-to-reorder
 
-[![NPM version][npm-version-image]][npm-url]
-[![Bower version][bower-version-image]][bower-url]
-[![MIT License][license-image]][license-url]
-
 Lightweight AngularJS drag and drop functionality to reorder lists without any dependencies other than Angular. Works great with ng-repeats!
 
 ### Demos: 
