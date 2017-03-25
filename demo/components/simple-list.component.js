@@ -17,14 +17,14 @@
               </li>
             </ul>
           </div>
-          <div class="panel-footer">
+         <!-- <div class="panel-footer">
             <div class="input-group">
               <input type="text" ng-model="$ctrl.character" class="form-control" placeholder="Add Marvel character..." ng-keyup="$ctrl.keyup($event)">
               <span class="input-group-btn">
                 <button class="btn btn-primary" type="button" ng-click="$ctrl.add()">Add</button>
               </span>
             </div>
-          </div>
+          </div>-->
         </div>
         
             `,
@@ -68,7 +68,7 @@
     };
 
     this.add = () => {
-      if(this.character) {
+      if (this.character) {
         this.avengers.push({
           rank: this.avengers.length + 1,
           name: this.character
