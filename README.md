@@ -18,7 +18,7 @@ $ bower install ng-drag-to-reorder
 
 ## Inject into your Angular app
 
-- Add `ngDragToReorder` as a dependency to your module in your application.
+- Add **ngDragToReorder** as a dependency to your module in your application.
 
 ```js
 angular.module('yourApp', ['ngDragToReorder']);
@@ -76,7 +76,7 @@ Depending on which class the element you are hovering over has will determine wh
 Let's say you drag Element 1 and are hovering over Element 5. Element 5 will have the `dtr-over` class and either the `dtr-dropping-above` class if the mouse is above the
 halfway point (offsetY) or `dtr-dropping-below` if below it.  If above it, the previous sibling above (Element 4) will have the `dtr-dropping-below` class added to it. 
 If below the halfway point, the next sibling below (Element 6) will have the `dtr-dropping-above` class added to it. 
-After you drop Element 1, the `dtr-dragging` is removed immediately, followed by the `dtr-transition` class 1 second later or after the number of milliseconds passed
+After you drop Element 1, the `dtr-dragging` class is removed immediately, followed by the `dtr-transition` class one second later or after the number of milliseconds passed
 in via the `dtr-transition-timeout` attribute (see **Options** below). This allows for more flexibility in how you want to style the elements during the drag and drop process. 
 
 
@@ -87,7 +87,9 @@ in via the `dtr-transition-timeout` attribute (see **Options** below). This allo
 ```html
 <!-- In your template (example) -->
 <ul>
-  <li ng-repeat="avenger in $ctrl.avengers" drag-to-reorder="$ctrl.avengers" dtr-nit="{{$ctrl.draggable}}">
+  <li ng-repeat="avenger in $ctrl.avengers" 
+    drag-to-reorder="$ctrl.avengers" 
+    dtr-init="{{$ctrl.draggable}}">
     <span ng-bind="avenger.rank"></span>
     <span ng-bind="avenger.name"></span>
   </li>
@@ -111,7 +113,9 @@ This is just an available option in case you want to add some custom animation.
 ```html
 <!-- In your template (example) -->
 <ul>
-  <li ng-repeat="avenger in $ctrl.avengers" drag-to-reorder="$ctrl.avengers"  dtr-transition-timeout="5000">
+  <li ng-repeat="avenger in $ctrl.avengers" 
+    drag-to-reorder="$ctrl.avengers"  
+    dtr-transition-timeout="5000">
     <span ng-bind="avenger.rank"></span>
     <span ng-bind="avenger.name"></span>
   </li>
@@ -126,7 +130,9 @@ it. You can use the same service if you want to show or hide and buttons or othe
 ```html
 <!-- In your template (example) -->
 <ul>
-  <li ng-repeat="avenger in $ctrl.avengers" drag-to-reorder="$ctrl.avengers" dtr-nit="{{$ctrl.draggable}}">
+  <li ng-repeat="avenger in $ctrl.avengers" 
+    drag-to-reorder="$ctrl.avengers" 
+    dtr-nit="{{$ctrl.draggable}}">
     <span ng-bind="avenger.rank"></span>
     <span ng-bind="avenger.name"></span>
   </li>
