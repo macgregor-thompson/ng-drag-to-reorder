@@ -131,8 +131,8 @@ it. You can use the same service if you want to show or hide and buttons or othe
 <!-- In your template (example) -->
 <ul>
   <li ng-repeat="avenger in $ctrl.avengers" 
-    drag-to-reorder="$ctrl.avengers" 
-    dtr-nit="{{$ctrl.draggable}}">
+   drag-to-reorder="$ctrl.avengers" 
+    dtr-init="{{$ctrl.draggable}}">
     <span ng-bind="avenger.rank"></span>
     <span ng-bind="avenger.name"></span>
   </li>
