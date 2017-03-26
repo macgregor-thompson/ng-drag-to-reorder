@@ -2,27 +2,43 @@
   'use strict';
 
   angular.module('ngDragToReorder', [])
-    .service('ngDragToReorder', function () {
+    .factory('ngDragToReorder', function () {
+
+      var _list = [];
+
       return {
-        isSupported: draggable
+        isSupported: draggable,
+        setList: setList,
+        getList: getList
       };
+
+      function setList(array) {
+        if (array && array.length) _list = array;
+      }
+
+      function getList() {
+        return _list;
+      }
 
       function draggable() {
         var div = document.createElement('div');
         return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
       }
+
     })
     .directive('dragToReorder', ['ngDragToReorder', '$parse', function (ngDragToReorder, $parse) {
       return {
         restrict: 'A',
-        link: function (scope, element, attrs) {
+        link: function (scope, element, attrs, ctrl) {
 
-          if (!ngDragToReorder.isSupported() || attrs.dragToReorder === '') return;
+          if (!ngDragToReorder.isSupported()) return;
 
-          var el = element[0], list = $parse(attrs.dragToReorder)(scope), stringIdx, int, item,
+          ngDragToReorder.setList($parse(attrs.dragToReorder)((scope)));
+
+          var el = element[0], list, stringIdx, int, item,
             newIdx, startIndex, target, offsetY, dragging = 'dtr-dragging', over = 'dtr-over',
             droppingAbove = 'dtr-dropping-above', droppingBelow = 'dtr-dropping-below', transition = 'dtr-transition',
-            delay = 1000, loaded = false;
+            delay = 1000, loaded = false, above = [],  below = [], i, j;
 
           //console.log('list:', list);
 
@@ -85,8 +101,20 @@
               }
             }
 
+            list = ngDragToReorder.getList();
             item = list.splice(startIndex, 1)[0];
             list.splice(newIdx, 0, item);
+
+            ngDragToReorder.setList(list);
+
+            scope.$apply(function () {
+              scope.$emit('dragToReorder_drop', {
+                item: item,
+                newIndex: newIdx,
+                prevIndex: startIndex,
+                list: list
+              });
+            });
 
             this.classList.remove(over);
             this.classList.remove(droppingAbove);
@@ -102,14 +130,6 @@
               this.nextElementSibling.classList.remove(droppingBelow);
             }
 
-            scope.$apply(function() {
-              scope.$emit('dragToReorder_drop', {
-                item: item,
-                newIndex: newIdx,
-                prevIndex: startIndex,
-                list: list
-              });
-            })
           }
 
 
@@ -131,6 +151,7 @@
             setTimeout(function () {
               target.classList.remove(transition)
             }, delay);
+            cleanupClasses();
             return false;
           }
 
@@ -168,6 +189,22 @@
             this.classList.remove(droppingAbove);
             this.classList.remove(droppingBelow);
             return false;
+          }
+
+
+          function cleanupClasses () {
+            above = document.querySelectorAll('.' + droppingAbove);
+            below = document.querySelectorAll('.' + droppingBelow);
+            if (above.length) {
+              for (i = 0; i < above.length; i++) {
+                above[i].classList.remove(droppingAbove);
+              }
+            }
+            if (below.length) {
+              for (i = 0; i < below.length; i++) {
+                below[i].classList.remove(droppingBelow);
+              }
+            }
           }
 
 
