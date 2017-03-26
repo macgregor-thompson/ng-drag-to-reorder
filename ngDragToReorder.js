@@ -3,46 +3,42 @@
 
   angular.module('ngDragToReorder', [])
     .factory('ngDragToReorder', function () {
-
-      var _list = [];
-
       return {
-        isSupported: draggable,
-        setList: setList,
-        getList: getList
+        isSupported:  function (){
+          var div = document.createElement('div');
+          return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+        }
       };
-
-      function setList(array) {
-        if (array && array.length) _list = array;
-      }
-
-      function getList() {
-        return _list;
-      }
-
-      function draggable() {
-        var div = document.createElement('div');
-        return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
-      }
-
     })
-    .directive('dragToReorder', ['ngDragToReorder', '$parse', function (ngDragToReorder, $parse) {
+    .directive('dragToReorder', function () {
       return {
         restrict: 'A',
+        bindToController: true,
+        scope: {
+          dragToReorder: '='
+        },
+        controller: function () {}
+      }
+    })
+    .directive('dtrDraggable', ['ngDragToReorder', function (ngDragToReorder) {
+      return {
+        restrict: 'A',
+        require: '^^dragToReorder',
         link: function (scope, element, attrs, ctrl) {
 
           if (!ngDragToReorder.isSupported()) return;
 
-          ngDragToReorder.setList($parse(attrs.dragToReorder)((scope)));
-
           var el = element[0], list, stringIdx, int, item,
             newIdx, startIndex, target, offsetY, dragging = 'dtr-dragging', over = 'dtr-over',
             droppingAbove = 'dtr-dropping-above', droppingBelow = 'dtr-dropping-below', transition = 'dtr-transition',
-            delay = 1000, loaded = false, above = [],  below = [], i, j;
+            eventName = 'dropped', delay = 1000, loaded = false, above = [], below = [], i, j;
 
-          //console.log('list:', list);
 
-          if (attrs.hasOwnProperty('dtrInit')) {
+          if (attrs.dtrEvent) {
+            eventName = attrs.dtrEvent || 'dropped';
+          }
+
+          if (attrs.dtrInit) {
             attrs.$observe('dtrInit', function (val) {
               if (val && val !== 'false') {
                 addListeners();
@@ -55,11 +51,10 @@
             addListeners();
           }
 
-          if (attrs.hasOwnProperty('dtrTransitionTimeout')) {
+          if (attrs.dtrTransitionTimeout) {
             int = parseInt(attrs.dtrTransitionTimeout, 10);
             delay = int ? int : 1000;
           }
-
 
           function addListeners() {
             el.draggable = true;
@@ -100,14 +95,12 @@
               }
             }
 
-            list = ngDragToReorder.getList();
+            list = ctrl.dragToReorder;
             item = list.splice(startIndex, 1)[0];
             list.splice(newIdx, 0, item);
 
-            ngDragToReorder.setList(list);
-
             scope.$apply(function () {
-              scope.$emit('dragToReorder_drop', {
+              scope.$emit('dragToReorder.' + eventName, {
                 item: item,
                 newIndex: newIdx,
                 prevIndex: startIndex,
@@ -128,15 +121,10 @@
               this.nextElementSibling.classList.remove(droppingAbove);
               this.nextElementSibling.classList.remove(droppingBelow);
             }
-
           }
-
 
           function dragStart(e) {
             e.dataTransfer.effectAllowed = 'move';
-            // **IMPORTANT** In order for this to work in IE, 'text' MUST
-            // not 'Text', ot 'text/plain' etc...
-            // Also the value (idx) needs to be a string
             stringIdx = scope.$index.toString();
             e.dataTransfer.setData('text', stringIdx);
             this.classList.add(dragging);
@@ -153,7 +141,6 @@
             cleanupClasses();
             return false;
           }
-
 
           function dragOver(e) {
             e.preventDefault();
@@ -190,8 +177,7 @@
             return false;
           }
 
-
-          function cleanupClasses () {
+          function cleanupClasses() {
             above = document.querySelectorAll('.' + droppingAbove);
             below = document.querySelectorAll('.' + droppingBelow);
             if (above.length) {
@@ -200,8 +186,8 @@
               }
             }
             if (below.length) {
-              for (i = 0; i < below.length; i++) {
-                below[i].classList.remove(droppingBelow);
+              for (j = 0; j < below.length; j++) {
+                below[j].classList.remove(droppingBelow);
               }
             }
           }

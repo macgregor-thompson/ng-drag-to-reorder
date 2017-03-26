@@ -45,4 +45,15 @@ li.dtr-transition {
   border-bottom: 15px solid #ccc !important;
 }
 
+
+span.dragging, span.over, span.above, span.below, span.transition {
+  display:none;
+  font-size: 1.2em;
+  margin-left: 15px;
+}
+
+.dtr-dragging span.dragging, .dtr-over span.over, .dtr-dropping-above span.above,
+.dtr-dropping-below span.below, .dtr-transition span.transition{
+  display: inline-block;
+}
 /* End Drag and Drop */
