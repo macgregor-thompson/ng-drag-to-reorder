@@ -81,7 +81,6 @@
             el.removeEventListener('drop', drop, false);
           }
 
-
           function drop(e) {
             e.preventDefault();
             if (e.stopPropagation) e.stopPropagation();
@@ -206,7 +205,6 @@
               }
             }
           }
-
 
         }
       };
