@@ -125,7 +125,7 @@ This is just an available option in case you want to add some custom animation.
 
 3. You can import the **ngDragToReorder** service into your controller and check to see if drag and drop functionality is supported by your 
 browser. The `drag-to-reorder` directive uses this service to prevent itself from wiring up event listeners if the browser doesn't support 
-it. You can use the same service if you want to show or hide and buttons or other UI based on browser support.  
+it. You can use the same service if you want to show or hide any buttons or other UI based on browser support.  
 
 ```html
 <!-- In your template (example) -->
