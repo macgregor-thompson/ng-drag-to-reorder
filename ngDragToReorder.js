@@ -4,7 +4,7 @@
   angular.module('ngDragToReorder', [])
     .factory('ngDragToReorder', function () {
       return {
-        isSupported:  function (){
+        isSupported: function () {
           var div = document.createElement('div');
           return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
         }
@@ -13,23 +13,36 @@
     .directive('dragToReorder', function () {
       return {
         restrict: 'A',
-        bindToController: true,
-        scope: {
-          dragToReorder: '='
-        },
-        controller: function () {}
+        scope: true,
+        controller: ['$parse', '$attrs', '$scope', function ($parse, $attrs, $scope) {
+          this.getList = function() {
+            //return a shallow copy and prevents the updating of the parent object
+            return $parse($attrs.dragToReorder)($scope).slice();
+          };
+        }],
       }
     })
-    .directive('dtrDraggable', ['ngDragToReorder', function (ngDragToReorder) {
+    .directive('dragToReorderBind', function () {
       return {
         restrict: 'A',
-        require: '^^dragToReorder',
-        link: function (scope, element, attrs, ctrl) {
+        scope: true,
+        controller: ['$parse', '$attrs', '$scope', function ($parse, $attrs, $scope) {
+          this.getList = function() {
+            return $parse($attrs.dragToReorderBind)($scope);
+          };
+        }],
+      }
+    })
+    .directive('dtrDraggable', ['ngDragToReorder', '$parse', function (ngDragToReorder, $parse) {
+      return {
+        restrict: 'A',
+        require: ['?^^dragToReorder', '?^^dragToReorderBind'],
+        link: function (scope, element, attrs, ctrls) {
 
           if (!ngDragToReorder.isSupported()) return;
 
-          var el = element[0], list, stringIdx, int, item,
-            newIdx, startIndex, target, offsetY, dragging = 'dtr-dragging', over = 'dtr-over',
+          var el = element[0], list, stringIdx, int, item, listGetter = ctrls[0] ? ctrls[0] : ctrls[1],
+            newIdx, prevIdx, target, offsetY, dragging = 'dtr-dragging', over = 'dtr-over',
             droppingAbove = 'dtr-dropping-above', droppingBelow = 'dtr-dropping-below', transition = 'dtr-transition',
             eventName = 'dropped', delay = 1000, loaded = false, above = [], below = [], i, j;
 
@@ -49,11 +62,6 @@
             });
           } else {
             addListeners();
-          }
-
-          if (attrs.dtrTransitionTimeout) {
-            int = parseInt(attrs.dtrTransitionTimeout, 10);
-            delay = int ? int : 1000;
           }
 
           function addListeners() {
@@ -79,32 +87,32 @@
           function drop(e) {
             e.preventDefault();
             if (e.stopPropagation) e.stopPropagation();
-            startIndex = parseInt(e.dataTransfer.getData('text'), 10);
+            prevIdx = parseInt(e.dataTransfer.getData('text'), 10);
             this.classList.remove(over);
             if (this.classList.contains(droppingAbove)) {
-              if (startIndex < scope.$index) {
+              if (prevIdx < scope.$index) {
                 newIdx = scope.$index - 1;
               } else {
                 newIdx = scope.$index;
               }
             } else {
-              if (startIndex < scope.$index) {
+              if (prevIdx < scope.$index) {
                 newIdx = scope.$index;
               } else {
                 newIdx = scope.$index + 1;
               }
             }
 
-            list = ctrl.dragToReorder;
-            item = list.splice(startIndex, 1)[0];
+            list = listGetter.getList();
+            item = list.splice(prevIdx, 1)[0];
             list.splice(newIdx, 0, item);
 
             scope.$apply(function () {
               scope.$emit('dragToReorder.' + eventName, {
+                list: list,
                 item: item,
                 newIndex: newIdx,
-                prevIndex: startIndex,
-                list: list
+                prevIndex: prevIdx
               });
             });
 
@@ -135,6 +143,11 @@
           function dragEnd(e) {
             target = this;
             target.classList.remove(dragging);
+            if (attrs.dtrTransitionTimeout) {
+              int = parseInt($parse(attrs.dtrTransitionTimeout)(scope), 10);
+              if (typeof int === 'number' && int >= 0)
+                delay = int;
+            }
             setTimeout(function () {
               target.classList.remove(transition)
             }, delay);

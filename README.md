@@ -1,10 +1,12 @@
 # ng-drag-to-reorder
 
-Lightweight AngularJS drag and drop functionality to reorder lists without any dependencies other than Angular. Works great with ng-repeats!
+Lightweight AngularJS drag and drop functionality to reorder lists, table rows, etc. without any dependencies other than Angular. Works great with ng-repeats!
 
 ## Demos: 
 
-- [`Such Demo`](http://htmlpreview.github.io/?https://github.com/mhthompson86/ng-drag-to-reorder/blob/master/demo/index.html)
+- [`Avengers Demo`](http://htmlpreview.github.io/?https://github.com/mhthompson86/ng-drag-to-reorder/blob/master/demo/index.html)
+- [`CSS Classes`](http://htmlpreview.github.io/?https://github.com/mhthompson86/ng-drag-to-reorder/blob/master/demo/css-classes.html)
+
 
 ## Install:
 
@@ -26,8 +28,14 @@ angular.module('yourApp', ['ngDragToReorder']);
 
 ## How to Use:
 
-- For the most basic usage just add the `drag-to-reorder` attribute to the parent element and pass it the list you want it to track.
-Then on the draggable elements, add the `dtr-draggable` attribute. And that's it!
+There are 2 fundamental options when deciding how you want this to work.  You can either **1)** listen for the `dragToReorder.dropped` 
+on your controller and then update your collection based on the data that was passed back or **2)**
+use 2-way binding to directly update the collection that is being passed in.
+If you want to modify your collection based on the reordering outcome, the first option is probably best.
+
+**1) Listening for the dropped event and then doing something with the newly reordered collection.**
+- Add the `drag-to-reorder` attribute to the parent element and pass it the collection you want it to track.
+Then on the draggable elements, add the `dtr-draggable` attribute.
 
 ```html
 <ul drag-to-reorder="$ctrl.avengers">
@@ -38,13 +46,16 @@ Then on the draggable elements, add the `dtr-draggable` attribute. And that's it
 </ul>
 ```
 
-- When you drop an item, the `dragToReorder.dropped` event is broadcasted and will contain the relevant data,
-allowing your controllers to know when the list has been reordered and react to the changes. 
-(See #4`dtrEvent` in **Options** below on how you can customize the event name.)
-- In your controller, you can listen for the event with something similar to below:
+- Then in your controller, listen for the `dragToReorder.dropped` event and do something with the data that's passed in.
+The `dragToReorder.dropped` event is broadcasted when an item is dropped and will contain the relevant data,
+allowing your controllers to know when the list has been reordered and react to the changes.
+(See #4 `dtrEvent` in **Options** below on how you can customize the event name.)
 
 ```js
 $scope.$on('dragToReorder.dropped', function (evt, data) {   
+    
+  // The list after it has been reordered
+  data.list
     
   // The dragged item
   data.item
@@ -54,10 +65,21 @@ $scope.$on('dragToReorder.dropped', function (evt, data) {
   
   // The previous index number for the dragged item
   data.prevIndex
-  
-  // The list after it has been reordered
-  data.list
 });
+```
+
+**2) Using 2-way data binding to directly update the collection that is being passed in.**
+- Add the `drag-to-reorder-bind` attribute to the parent element and pass it the collection you want it to track.
+Then on the draggable elements, add the `dtr-draggable` attribute. That's it! This is great if all you need to know is the index
+number of an item. 
+
+```html
+<ul drag-to-reorder-bind="$ctrl.avengers">
+  <li ng-repeat="avenger in $ctrl.avengers" dtr-draggable>
+    <span ng-bind="avenger.rank"></span>
+    <span ng-bind="avenger.name"></span>
+  </li>
+</ul>
 ```
 
 ## CSS Classes:
@@ -80,7 +102,7 @@ Depending on which class the element you are hovering over has will determine wh
 **E.g. - [`CSS Classes Demo`](http://htmlpreview.github.io/?https://github.com/mhthompson86/ng-drag-to-reorder/blob/master/demo/index.html)**
 If you have Elements 1-10.  And you begin dragging Element 1.  Element 1 will have the `dtr-dragging` and `dtr-transition` classes added to it.
 Let's say you drag Element 1 and are hovering over Element 5. Element 5 will have the `dtr-over` class and either the `dtr-dropping-above` class if the mouse is above the
-halfway point (offsetY) or `dtr-dropping-below` if below it.  If above it, the previous sibling above (Element 4) will have the `dtr-dropping-below` class added to it. 
+halfway point of Element 5 or `dtr-dropping-below` if below it.  If above it, the previous sibling above (Element 4) will have the `dtr-dropping-below` class added to it. 
 If below the halfway point, the next sibling below (Element 6) will have the `dtr-dropping-above` class added to it. 
 After you drop Element 1, the `dtr-dragging` class is removed immediately, followed by the `dtr-transition` class one second later or after the number of milliseconds passed
 in via the `dtr-transition-timeout` attribute (see **Options** below). This allows for more flexibility in how you want to style the elements during the drag and drop process. 
@@ -115,6 +137,7 @@ in via the `dtr-transition-timeout` attribute (see **Options** below). This allo
 ```
 
 2. `dtr-transition-timeout` allows you to set the timeout period (in milliseconds) for when the `dtr-transition` class is removed from the dragged element. 
+You can pass in the number of milliseconds, or you can pass in a variable for it to evaluate.
 This is just an available option in case you want to add some custom animation.
 
 ```html
@@ -122,7 +145,8 @@ This is just an available option in case you want to add some custom animation.
 <ul drag-to-reorder="$ctrl.avengers">
   <li ng-repeat="avenger in $ctrl.avengers" 
     dtr-draggable
-    dtr-transition-timeout="5000">
+    dtr-transition-timeout="5000"> 
+    <!-- e.g. dtr-transition-timeout="$ctrl.myTimeoutPeriod" -->
     <span ng-bind="avenger.rank"></span>
     <span ng-bind="avenger.name"></span>
   </li>
@@ -162,8 +186,8 @@ it. You can use the same service if you want to show or hide any buttons or othe
 ```
 
 4. `dtr-event` allows you to customize the name of the event broadcasted when an element is dropped.
-This is particularly helpful if you have more than one list and/or do not want multiple controllers reacting to the same event.
-The name passed in will replace the 'dropped' in 'dragToReorder.dropped'.  See below for example.
+This is particularly helpful if you have more than one collection and/or controller and want to make sure they only react to the event they are supposed to.
+The name passed in will replace 'dropped' in 'dragToReorder.dropped'.  See below for example.
 
 ```html
 <!-- In your template (example) -->
