@@ -112,6 +112,7 @@ in via the `dtr-transition-timeout` attribute (see **Options** below). This allo
 ## Options:
 
 1. `dtr-init` allows you turn the drag and drop functionality on and off. You can pass it an expression to observe and will add or remove the event listeners based on a true/false value.
+(Note that this is the only attribute that requires interpolation.)
 
 ```html
 <!-- In your template (example) -->
