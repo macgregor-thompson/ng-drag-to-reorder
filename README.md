@@ -111,7 +111,9 @@ in via the `dtr-transition-timeout` attribute (see **Options** below). This allo
 
 ## Options:
 
-1. `dtr-init` allows you turn the drag and drop functionality on and off. You can pass it an expression to observe and will add or remove the event listeners based on a true/false value.
+**1. dtrInit** 
+
+- The `dtr-init` attribute allows you turn the drag and drop functionality on and off. You can pass it an expression to observe and will add or remove the event listeners based on a true/false value.
 (Note that this is the only attribute that requires interpolation.)
 
 ```html
@@ -136,8 +138,10 @@ in via the `dtr-transition-timeout` attribute (see **Options** below). This allo
   //toggle drag and drop
   this.toggleDrag = () => this.draggable = !this.draggable;
 ```
+<br>
 
-2. `dtr-transition-timeout` allows you to set the timeout period (in milliseconds) for when the `dtr-transition` class is removed from the dragged element. 
+**2. dtrTransitionTimeout**
+- The `dtr-transition-timeout` attribute allows you to set the timeout period (in milliseconds) for when the `dtr-transition` class is removed from the dragged element. 
 You can pass in the number of milliseconds, or you can pass in a variable for it to evaluate.
 This is just an available option in case you want to add some custom animation.
 
@@ -153,9 +157,10 @@ This is just an available option in case you want to add some custom animation.
   </li>
 </ul>
 ```
+<br>
 
-
-3. You can import the **ngDragToReorder** service into your controller and check to see if drag and drop functionality is supported by your 
+**3. The ngDragToReorder service**
+- The `ngDragToReorder` service can be imported into your controller to check to see if drag and drop functionality is supported by your 
 browser. The `dtr-draggable` directive uses this service to prevent itself from wiring up event listeners if the browser doesn't support 
 it. You can use the same service if you want to show or hide any buttons or other UI based on browser support.  
 
@@ -185,8 +190,10 @@ it. You can use the same service if you want to show or hide any buttons or othe
     this.toggleDrag = () => this.draggable = !this.draggable;
   }
 ```
+<br>
 
-4. `dtr-event` allows you to customize the name of the event broadcasted when an element is dropped.
+**4. dtrEvent**
+- The `dtr-event` attribute allows you to customize the name of the event broadcasted when an element is dropped.
 This is particularly helpful if you have more than one collection and/or controller and want to make sure they only react to the event they are supposed to.
 The name passed in will replace 'dropped' in 'dragToReorder.dropped'.  See below for example.
 
