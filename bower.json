@@ -30,6 +30,6 @@
     "test",
     "tests",
     "*.json",
-    "demo"
+    "demo/"
   ]
 }
