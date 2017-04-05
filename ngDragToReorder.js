@@ -110,7 +110,6 @@
             el.removeEventListener('drag', drag, false);
           }
 
-
           function drag(e) {
             if (listScrollbar) {
               if (e.pageY - listTopY <= 25) {
