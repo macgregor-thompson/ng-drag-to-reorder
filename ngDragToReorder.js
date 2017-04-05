@@ -52,8 +52,23 @@
             droppingAbove = 'dtr-dropping-above', droppingBelow = 'dtr-dropping-below', transition = 'dtr-transition',
             eventName = 'dropped', delay = 1000, loaded = false, above = [], below = [], i, j,
             topOffset = 50, bottomOffset = 50, windowHeight, listHeight, slowScroll = false, fastScroll = false,
-            listScrollbar = false, listEl, listScroll = false, itemOffestTop, startY, listTopY;
+            listScrollbar = false, listEl, listScroll = false, itemOffestTop, startY, listTopY,
+            isChrome = !!window.chrome && !!window.chrome.webstore, isIE = !!document.documentMode,
+            isEdge = !isIE && !!window.StyleMedia, isFirefox = typeof InstallTrigger !== 'undefined',
+            isSafari = /constructor/i.test(window.HTMLElement) || (function (p) {
+                return p.toString() === "[object SafariRemoteNotification]";
+              })(!window['safari'] || safari.pushNotification);
 
+          if (isChrome)
+            console.log('Browser: Chrome');
+          if (isIE)
+            console.log('Browser: Internet Explorer');
+          if (isEdge)
+            console.log('Browser: Edge');
+          if (isFirefox)
+            console.log('Browser: Firefox');
+          if (isSafari)
+            console.log('Browser: Safari');
 
           if (attrs.dtrEvent) {
             eventName = attrs.dtrEvent || 'dropped';
@@ -80,7 +95,8 @@
             el.addEventListener('dragleave', dragLeave, false);
             el.addEventListener('dragover', dragOver, false);
             el.addEventListener('drop', drop, false);
-            el.addEventListener('drag', drag, false);
+            if (isChrome || isIE || isEdge)
+              el.addEventListener('drag', drag, false);
           }
 
           function removeListeners() {
@@ -145,7 +161,6 @@
           }
 
           function scrollSlow(step) {
-            console.log('scroll slow');
             window.scrollBy(0, step);
             if (slowScroll)
               setTimeout(function () {
@@ -167,7 +182,7 @@
               setTimeout(function () {
                 scrollList(step);
               }, 20)
-            } else console.log(listScroll, 'scroll list stop');
+            }
           }
 
 
@@ -188,7 +203,6 @@
           }
 
           function dragEnd(e) {
-            console.log('drag end');
             slowScroll = false;
             fastScroll = false;
             listScroll = false;
