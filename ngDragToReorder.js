@@ -22,7 +22,7 @@
           this.elem = function () {
             return $element[0];
           };
-        }],
+        }]
       }
     })
     .directive('dragToReorderBind', function () {
@@ -36,7 +36,7 @@
           this.elem = function () {
             return $element[0];
           };
-        }],
+        }]
       }
     })
     .directive('dtrDraggable', ['ngDragToReorder', '$parse', function (ngDragToReorder, $parse) {
@@ -58,17 +58,6 @@
             isSafari = /constructor/i.test(window.HTMLElement) || (function (p) {
                 return p.toString() === "[object SafariRemoteNotification]";
               })(!window['safari'] || safari.pushNotification);
-
-          if (isChrome)
-            console.log('Browser: Chrome');
-          if (isIE)
-            console.log('Browser: Internet Explorer');
-          if (isEdge)
-            console.log('Browser: Edge');
-          if (isFirefox)
-            console.log('Browser: Firefox');
-          if (isSafari)
-            console.log('Browser: Safari');
 
           if (attrs.dtrEvent) {
             eventName = attrs.dtrEvent || 'dropped';
