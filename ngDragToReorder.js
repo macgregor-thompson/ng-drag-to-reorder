@@ -45,7 +45,7 @@
         require: ['?^^dragToReorder', '?^^dragToReorderBind'],
         link: function (scope, element, attrs, ctrls) {
 
-          if (!ngDragToReorder.isSupported()) return;
+          if (!ngDragToReorder.isSupported() || attrs.dtrDraggable != "" && !$parse(attrs.dtrDraggable)(scope)) return;
 
           var el = element[0], list, stringIdx, int, item, listCtrl = ctrls[0] ? ctrls[0] : ctrls[1],
             newIdx, prevIdx, target, offsetY, dragging = 'dtr-dragging', over = 'dtr-over',
